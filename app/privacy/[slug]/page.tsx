@@ -10,14 +10,15 @@ import { Toc } from "../../../components/toc";
 export const dynamic = "force-dynamic";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-type PageProps = { params: { slug: string } };
+type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const doc = await getPrivacyBySlug(params.slug);
+  const { slug } = await params;
+  const doc = await getPrivacyBySlug(slug);
   if (!doc) return { title: "Not Found" };
-  const title = (doc.data?.title as string) || `Privacy Policy – ${params.slug}`;
+  const title = (doc.data?.title as string) || `Privacy Policy – ${slug}`;
   const description = (doc.data?.description as string) || "Privacy policy for this application.";
-  const url = `${siteUrl}/privacy/${params.slug}`;
+  const url = `${siteUrl}/privacy/${slug}`;
   return {
     title,
     description,
@@ -27,7 +28,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export default async function PrivacyPage({ params }: PageProps) {
-  const doc = await getPrivacyBySlug(params.slug);
+  const { slug } = await params;
+  const doc = await getPrivacyBySlug(slug);
   if (!doc) notFound();
 
   const { html, toc } = renderMarkdown(doc.content);

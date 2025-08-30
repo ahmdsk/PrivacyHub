@@ -69,7 +69,7 @@ export function renderMarkdown(md: string): { html: string; toc: TocItem[] } {
   };
 
   // Disable default headerIds to avoid duplicate ids; we set our own
-  marked.setOptions({ renderer, mangle: false, headerIds: false });
+  marked.setOptions({ renderer });
 
   const html = marked.parse(md) as string;
   return { html, toc };

@@ -9,19 +9,20 @@ import { Toc } from "../../../components/toc";
 export const dynamic = "force-dynamic";
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
 
-type PageProps = { params: { slug: string } };
+type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({
   params,
 }: PageProps): Promise<Metadata> {
-  const doc = await getDocBySlug("terms", params.slug);
+  const { slug } = await params;
+  const doc = await getDocBySlug("terms", slug);
   if (!doc) return { title: "Not Found" };
   const title =
-    (doc.data?.title as string) || `Terms & Conditions – ${params.slug}`;
+    (doc.data?.title as string) || `Terms & Conditions – ${slug}`;
   const description =
     (doc.data?.description as string) ||
     "Terms & Conditions for this application.";
-  const url = `${siteUrl}/terms/${params.slug}`;
+  const url = `${siteUrl}/terms/${slug}`;
   return {
     title,
     description,
@@ -31,7 +32,8 @@ export async function generateMetadata({
 }
 
 export default async function TermsPage({ params }: PageProps) {
-  const doc = await getDocBySlug("terms", params.slug);
+  const { slug } = await params;
+  const doc = await getDocBySlug("terms", slug);
   if (!doc) notFound();
 
   const { html, toc } = renderMarkdown(doc.content);
