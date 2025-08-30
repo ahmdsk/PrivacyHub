@@ -1,0 +1,12 @@
+[
+  {
+    "slug": "my-awesome-app",
+    "app_name": "My Awesome App",
+    "company_name": "PT Contoh Teknologi",
+    "contact_email": "privacy@contoh.co",
+    "data_collected": "- Email (optional)\n- Crash logs\n- Device model (anonymized)",
+    "purposes": "- Authentication\n- Analytics\n- Product improvement",
+    "third_parties": "- Google Analytics for Firebase\n- Sentry",
+    "updated": "2025-08-30"
+  }
+]
